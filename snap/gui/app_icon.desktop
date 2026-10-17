@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=TAPSIN VPN
+Comment=TAPSIN VPN - Secure Proxy Client
+Exec=tapsin_vpn
+Icon=app_icon.png
+Terminal=false
+Type=Application
+Categories=Network;
