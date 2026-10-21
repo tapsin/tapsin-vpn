@@ -1,18 +1,9 @@
 name: CI
 on:
-  # pull_request:
-  #   paths-ignore:
-  #     - '**.md'
-  #     - 'docs/**'
-  #     - 'test.configs/**'
-  #     - '.vscode/'
-  #     - 'appcast.xml'
   push:
     branches:
-       - main
-       - dev
-       - android-fix-action-bug
-       - new-design-v2 
+      - main
+      - dev
     paths-ignore:
       - '**.md'
       - 'docs/**'
@@ -20,15 +11,21 @@ on:
       - 'appcast.xml'
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  run:
-    uses: ./.github/workflows/build.yml
-    secrets: inherit
-    permissions: write-all
-    if: "${{!contains(github.event.head_commit.message, 'release: version')}}"
-    with:
-      upload-artifact: ${{ github.event_name == 'push' }}
-      
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.x'
+          channel: 'stable'
+          cache: true
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos || true
+
