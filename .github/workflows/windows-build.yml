@@ -1,0 +1,54 @@
+name: Windows Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: 'Build channel'
+        required: false
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
+
+env:
+  IS_GITHUB_ACTIONS: 1
+  CHANNEL: "${{ inputs.channel }}"
+  FLUTTER_VERSION: '3.24.0'
+
+jobs:
+  build-windows:
+    runs-on: windows-2019
+    permissions: write-all
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2.16.0
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+
+      - name: Setup dependencies
+        run: make windows-install-dependencies
+
+      - name: Prepare
+        run: |
+          make windows-prepare
+          tree
+
+      - name: Build
+        run: make windows-release
+
+      - name: Copy outputs
+        run: .\scripts\package_windows.ps1
+
+      - name: Upload exe artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tapsin-vpn-windows-exe
+          path: ./out
+          retention-days: 7
