@@ -38,7 +38,7 @@ class SettingCheckbox extends ConsumerWidget {
       subtitle: Text(textWithTranslation(selectedValues, ref)),
       onTap: () async {
         final result = await ref
-            .read(dialogNotifierProvider.notifier)
+            .read(dialogProvider.notifier)
             .showSettingCheckbox(
               title: title,
               values: values,

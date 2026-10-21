@@ -19,9 +19,9 @@ class ConnectionWrapper extends StatefulHookConsumerWidget {
 class _ConnectionWrapperState extends ConsumerState<ConnectionWrapper> with AppLogger {
   @override
   Widget build(BuildContext context) {
-    ref.listen(connectionNotifierProvider, (_, _) {});
+    ref.listen(connectionProvider, (_, _) {});
 
-    ref.listen(configOptionNotifierProvider, (previous, next) async {
+    ref.listen(configOptionProvider, (previous, next) async {
       if (next case AsyncData(value: true)) {
         final t = ref.read(translationsProvider).requireValue;
         ref
@@ -31,11 +31,11 @@ class _ConnectionWrapperState extends ConsumerState<ConnectionWrapper> with AppL
               // actionText: t.connection.reconnect,
               // callback: () async {
               //   await ref
-              //       .read(connectionNotifierProvider.notifier)
+              //       .read(connectionProvider.notifier)
               //       .reconnect(await ref.read(activeProfileProvider.future));
               // },
             );
-        await ref.read(connectionNotifierProvider.notifier).reconnect(await ref.read(activeProfileProvider.future));
+        await ref.read(connectionProvider.notifier).reconnect(await ref.read(activeProfileProvider.future));
       }
     });
 

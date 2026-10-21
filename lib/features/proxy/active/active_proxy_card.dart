@@ -16,10 +16,10 @@ class ActiveProxyFooter extends ConsumerWidget with InfraLogger {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectionState = ref.watch(
-      connectionNotifierProvider.select((value) => value.valueOrNull ?? const Disconnected()),
+      connectionProvider.select((value) => value.value ?? const Disconnected()),
     );
 
-    final activeProxy = ref.watch(activeProxyNotifierProvider.select((value) => value.valueOrNull));
+    final activeProxy = ref.watch(activeProxyProvider.select((value) => value.value));
     final t = ref.watch(translationsProvider).requireValue;
 
     // Early return if required data is not available
@@ -33,7 +33,7 @@ class ActiveProxyFooter extends ConsumerWidget with InfraLogger {
     Future<void> handleUrlTest() async {
       try {
         if (!context.mounted) return;
-        await ref.read(activeProxyNotifierProvider.notifier).urlTest("");
+        await ref.read(activeProxyProvider.notifier).urlTest("");
       } catch (e) {
         // Handle error here
         loggy.error("Error during URL test: $e");
@@ -63,7 +63,7 @@ class ActiveProxyFooter extends ConsumerWidget with InfraLogger {
             InkWell(
               onTap: () async {
                 await handleUrlTest();
-                await ref.read(dialogNotifierProvider.notifier).showProxyInfo(outboundInfo: activeProxy);
+                await ref.read(dialogProvider.notifier).showProxyInfo(outboundInfo: activeProxy);
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -137,7 +137,7 @@ String getRealOutboundTag(OutboundInfo group) {
 //   @override
 //   Widget build(BuildContext context, WidgetRef ref) {
 //     final t = ref.watch(translationsProvider).requireValue;
-//     final stats = ref.watch(statsNotifierProvider).value;
+//     final stats = ref.watch(statsProvider).value;
 
 //     return Directionality(
 //       textDirection: TextDirection.values[(Directionality.of(context).index + 1) % TextDirection.values.length],

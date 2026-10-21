@@ -16,12 +16,12 @@ class GenericListPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(translationsProvider).requireValue;
-    final provider = genericListNotifierProvider(ruleListOrder, ruleEnum);
+    final provider = genericListProvider(ruleListOrder, ruleEnum);
     final list = ref.watch(provider);
 
     Future<void> addNewValue() async {
       final result = await ref
-          .read(dialogNotifierProvider.notifier)
+          .read(dialogProvider.notifier)
           .showSettingText(
             lable: t.pages.settings.routing.routeRule.genericList.addNew,
             validator: ruleEnum.validator(t),
@@ -38,7 +38,7 @@ class GenericListPage extends HookConsumerWidget {
                 ? null
                 : () async {
                     final result = await ref
-                        .read(dialogNotifierProvider.notifier)
+                        .read(dialogProvider.notifier)
                         .showConfirmation(
                           title: t.pages.settings.routing.routeRule.genericList.clearList,
                           message: t.pages.settings.routing.routeRule.genericList.clearListMsg,
@@ -63,7 +63,7 @@ class GenericListPage extends HookConsumerWidget {
           onRemove: () => ref.read(provider.notifier).remove(index),
           onUpdate: () async {
             final result = await ref
-                .read(dialogNotifierProvider.notifier)
+                .read(dialogProvider.notifier)
                 .showSettingText(
                   lable: t.pages.settings.routing.routeRule.genericList.update,
                   value: '${list[index]}',

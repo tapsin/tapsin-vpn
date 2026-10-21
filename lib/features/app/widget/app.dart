@@ -58,14 +58,14 @@ class App extends HookConsumerWidget with WidgetsBindingObserver, PresLogger {
     final upgrader = ref.watch(upgraderProvider);
     final activeBreakpoint = Breakpoint(context).activeBreakpoint;
 
-    ref.listen(foregroundProfilesUpdateNotifierProvider, (_, _) {});
+    ref.listen(foregroundProfilesUpdateProvider, (_, _) {});
     if (PlatformUtils.isAndroid) ref.listen(appBasedRoutingProvider, (_, _) {});
-    if (PlatformUtils.isDesktop) ref.listen(systemTrayNotifierProvider, (_, _) {});
+    if (PlatformUtils.isDesktop) ref.listen(systemTrayProvider, (_, _) {});
 
     // updating ActiveBreakpointNotifier value
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(activeBreakpointNotifierProvider.notifier).update(activeBreakpoint);
+        ref.read(activeBreakpointProvider.notifier).update(activeBreakpoint);
       });
       return null;
     }, [activeBreakpoint]);
@@ -126,7 +126,7 @@ class App extends HookConsumerWidget with WidgetsBindingObserver, PresLogger {
   //   final theme = AppTheme(themeMode, locale.preferredFontFamily);
   //   final upgrader = ref.watch(upgraderProvider);
 
-  //   ref.listen(foregroundProfilesUpdateNotifierProvider, (_, __) {});
+  //   ref.listen(foregroundProfilesUpdateProvider, (_, __) {});
 
   //   return WindowWrapper(
   //     TrayWrapper(

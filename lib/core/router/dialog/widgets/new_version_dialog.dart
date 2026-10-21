@@ -49,7 +49,7 @@ class NewVersionDialog extends HookConsumerWidget with PresLogger {
         if (canIgnore)
           TextButton(
             onPressed: () async {
-              await ref.read(appUpdateNotifierProvider.notifier).ignoreRelease(newVersion);
+              await ref.read(appUpdateProvider.notifier).ignoreRelease(newVersion);
               if (context.mounted) context.pop();
             },
             child: Text(t.common.ignore),

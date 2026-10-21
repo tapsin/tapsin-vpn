@@ -19,7 +19,7 @@ class ActiveBreakpointNotifier extends _$ActiveBreakpointNotifier {
 
 @riverpod
 bool? isMobileBreakpoint(Ref ref) {
-  final breakpoint = ref.watch(activeBreakpointNotifierProvider);
+  final breakpoint = ref.watch(activeBreakpointProvider);
   if (breakpoint == null) return null;
   return breakpoint == Breakpoints.mobile;
 }

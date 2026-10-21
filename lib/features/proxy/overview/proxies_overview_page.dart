@@ -17,8 +17,8 @@ class ProxiesOverviewPage extends HookConsumerWidget with PresLogger {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(translationsProvider).requireValue;
 
-    final proxies = ref.watch(proxiesOverviewNotifierProvider);
-    final sortBy = ref.watch(proxiesSortNotifierProvider);
+    final proxies = ref.watch(proxiesOverviewProvider);
+    final sortBy = ref.watch(proxiesSortProvider);
 
     // final selectActiveProxyMutation = useMutation(
     //   initialOnFailure: (error) => CustomToast.error(t.presentShortError(error)).show(context),
@@ -30,7 +30,7 @@ class ProxiesOverviewPage extends HookConsumerWidget with PresLogger {
         actions: [
           PopupMenuButton<ProxiesSort>(
             initialValue: sortBy,
-            onSelected: ref.read(proxiesSortNotifierProvider.notifier).update,
+            onSelected: ref.read(proxiesSortProvider.notifier).update,
             icon: const Icon(FluentIcons.arrow_sort_24_regular),
             tooltip: t.pages.proxies.sort,
             itemBuilder: (context) {
@@ -41,7 +41,7 @@ class ProxiesOverviewPage extends HookConsumerWidget with PresLogger {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async => await ref.read(proxiesOverviewNotifierProvider.notifier).urlTest("select"),
+        onPressed: () async => await ref.read(proxiesOverviewProvider.notifier).urlTest("select"),
         tooltip: t.pages.proxies.testDelay,
         child: const Icon(FluentIcons.flash_24_filled),
       ),
@@ -64,7 +64,7 @@ class ProxiesOverviewPage extends HookConsumerWidget with PresLogger {
                         proxy,
                         selected: group.selected == proxy.tag,
                         onTap: () async {
-                          await ref.read(proxiesOverviewNotifierProvider.notifier).changeProxy(group.tag, proxy.tag);
+                          await ref.read(proxiesOverviewProvider.notifier).changeProxy(group.tag, proxy.tag);
                           // if (selectActiveProxyMutation.state.isInProgress) return;
                           // selectActiveProxyMutation.setFuture(
                           // );

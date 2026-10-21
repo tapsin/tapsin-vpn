@@ -17,7 +17,7 @@ class FreeBtns extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(translationsProvider).requireValue;
-    final freeProfiles = ref.watch(freeProfilesNotifierProvider);
+    final freeProfiles = ref.watch(freeProfilesProvider);
     final freeProfilesFilteredByRegion = ref.watch(freeProfilesFilteredByRegionProvider);
     final theme = Theme.of(context);
     final locale = ref.watch(localePreferencesProvider);
@@ -47,11 +47,11 @@ class FreeBtns extends ConsumerWidget {
                       final title = isFa ? profile.title.fa : profile.title.en;
                       final consent = isFa ? profile.consent.fa : profile.consent.en;
                       final result = await ref
-                          .read(dialogNotifierProvider.notifier)
+                          .read(dialogProvider.notifier)
                           .showFreeProfileConsent(title: title, consent: consent);
                       if (result == true) {
                         await ref
-                            .read(addProfileNotifierProvider.notifier)
+                            .read(addProfileProvider.notifier)
                             .addManual(
                               url: profile.sublink,
                               userOverride: UserOverride(

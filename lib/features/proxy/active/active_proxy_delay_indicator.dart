@@ -14,7 +14,7 @@ class ActiveProxyDelayIndicator extends HookConsumerWidget with InfraLogger {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(translationsProvider).requireValue;
-    final activeProxy = ref.watch(activeProxyNotifierProvider);
+    final activeProxy = ref.watch(activeProxyProvider);
     final theme = Theme.of(context);
 
     if (activeProxy is! AsyncData) {
@@ -29,7 +29,7 @@ class ActiveProxyDelayIndicator extends HookConsumerWidget with InfraLogger {
       child: InkWell(
         onTap: () async {
           try {
-            await ref.read(activeProxyNotifierProvider.notifier).urlTest("");
+            await ref.read(activeProxyProvider.notifier).urlTest("");
           } catch (e) {
             // Handle error here
             loggy.error("Error during URL test: $e");

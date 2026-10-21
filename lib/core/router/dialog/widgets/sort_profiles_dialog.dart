@@ -12,7 +12,7 @@ class SortProfilesDialog extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(translationsProvider).requireValue;
     final theme = Theme.of(context);
-    final sort = ref.watch(profilesSortNotifierProvider);
+    final sort = ref.watch(profilesSortProvider);
 
     return AlertDialog(
       title: Text(t.dialogs.sortProfiles.title),
@@ -35,9 +35,9 @@ class SortProfilesDialog extends HookConsumerWidget {
                       : null,
                   onTap: () {
                     if (selected) {
-                      ref.read(profilesSortNotifierProvider.notifier).toggleMode();
+                      ref.read(profilesSortProvider.notifier).toggleMode();
                     } else {
-                      ref.read(profilesSortNotifierProvider.notifier).changeSort(e);
+                      ref.read(profilesSortProvider.notifier).changeSort(e);
                     }
                   },
                   selected: selected,

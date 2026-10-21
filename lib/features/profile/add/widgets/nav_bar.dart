@@ -13,7 +13,7 @@ class NavBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final t = ref.watch(translationsProvider).requireValue;
-    final freeSwitch = ref.watch(freeSwitchNotifierProvider);
+    final freeSwitch = ref.watch(freeSwitchProvider);
 
     final textColor = theme.colorScheme.onSurface;
     return Padding(
@@ -27,7 +27,7 @@ class NavBar extends ConsumerWidget {
             children: [
               Text(t.common.free, style: theme.textTheme.titleMedium!.copyWith(color: textColor)),
               const Gap(8),
-              Switch(value: freeSwitch, onChanged: ref.read(freeSwitchNotifierProvider.notifier).onChange),
+              Switch(value: freeSwitch, onChanged: ref.read(freeSwitchProvider.notifier).onChange),
             ],
           ),
           const Spacer(),
@@ -35,7 +35,7 @@ class NavBar extends ConsumerWidget {
             key: const ValueKey("help"),
             label: Text(t.common.help, style: theme.textTheme.labelLarge!.copyWith(color: textColor)),
             avatar: Icon(Icons.help_outline, color: theme.colorScheme.onSurfaceVariant),
-            onPressed: () async => await ref.read(dialogNotifierProvider.notifier).showNoActiveProfile(),
+            onPressed: () async => await ref.read(dialogProvider.notifier).showNoActiveProfile(),
           ),
         ],
       ),

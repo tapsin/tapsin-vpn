@@ -14,6 +14,7 @@ import 'package:hiddify/singbox/model/singbox_config_enum.dart';
 import 'package:hiddify/singbox/model/singbox_config_option.dart';
 import 'package:hiddify/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hooks_riverpod/legacy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class ConfigOptions {
@@ -544,7 +545,7 @@ abstract class ConfigOptions {
         ),
         profile: SingboxUnblockerProfileOption(id: ref.watch(unblockerProfileId)),
       ),
-      routeRule: RouteRule(rules: ref.watch(rulesNotifierProvider)).toProto3Json()! as Map<String, dynamic>,
+      routeRule: RouteRule(rules: ref.watch(rulesProvider)).toProto3Json()! as Map<String, dynamic>,
     );
   });
 }

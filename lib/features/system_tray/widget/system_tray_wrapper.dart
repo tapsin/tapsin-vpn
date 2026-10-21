@@ -10,7 +10,7 @@
 // class _TrayWrapperState extends ConsumerState<TrayWrapper> with TrayListener, AppLogger {
 //   @override
 //   Widget build(BuildContext context) {
-//     ref.listen(systemTrayNotifierProvider, (_, __) {});
+//     ref.listen(systemTrayProvider, (_, __) {});
 
 //     return widget.child;
 //   }
@@ -32,7 +32,7 @@
 //     if (Platform.isMacOS) {
 //       await trayManager.popUpContextMenu();
 //     } else {
-//       await ref.read(windowNotifierProvider.notifier).open();
+//       await ref.read(windowProvider.notifier).open();
 //     }
 //   }
 

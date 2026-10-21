@@ -83,7 +83,7 @@ class RuleNotifier extends _$RuleNotifier {
       return Rule(name: name, outbound: Outbound.direct, network: Network.all);
     } else {
       isEditMode = true;
-      return ref.read(rulesNotifierProvider).where((rule) => rule.listOrder == listOrder).first;
+      return ref.read(rulesProvider).where((rule) => rule.listOrder == listOrder).first;
     }
   }
 
@@ -101,9 +101,9 @@ class RuleNotifier extends _$RuleNotifier {
     assert(state.hasName() && state.hasOutbound());
     if (isEditMode) {
       assert(state.hasListOrder() && state.hasEnabled());
-      await ref.read(rulesNotifierProvider.notifier).updateRule(state);
+      await ref.read(rulesProvider.notifier).updateRule(state);
     } else {
-      await ref.read(rulesNotifierProvider.notifier).addRule(state);
+      await ref.read(rulesProvider.notifier).addRule(state);
     }
   }
 }
@@ -111,8 +111,8 @@ class RuleNotifier extends _$RuleNotifier {
 @riverpod
 bool isRuleEdited(Ref ref, int? listOrder) {
   if (listOrder == null) return true;
-  return ref.watch(RuleNotifierProvider(listOrder)) !=
-      ref.watch(rulesNotifierProvider.select((value) => value.where((rule) => rule.listOrder == listOrder))).first;
+  return ref.watch(ruleProvider(listOrder)) !=
+      ref.watch(rulesProvider.select((value) => value.where((rule) => rule.listOrder == listOrder))).first;
 }
 
 @riverpod

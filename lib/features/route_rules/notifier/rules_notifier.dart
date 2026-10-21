@@ -196,7 +196,7 @@ class RulesNotifier extends _$RulesNotifier with AppLogger {
     final t = ref.read(translationsProvider).requireValue;
     try {
       final isConfirmed = await ref
-          .read(dialogNotifierProvider.notifier)
+          .read(dialogProvider.notifier)
           .showConfirmation(
             title: t.dialogs.confirmation.importRouteRuleByDeepLinkWarning.title,
             message: t.dialogs.confirmation.importRouteRuleByDeepLinkWarning.message,

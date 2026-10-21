@@ -68,7 +68,7 @@ class WindowNotifier extends _$WindowNotifier with AppLogger {
       loggy.debug("restoring window to maximized state");
     }
     if (!silentStart) {
-      await ref.read(windowNotifierProvider.notifier).show(focus: false);
+      await ref.read(windowProvider.notifier).show(focus: false);
       loggy.debug("showing app window on start");
     } else {
       loggy.debug("silent start, remain hidden accessible via tray");
@@ -120,7 +120,7 @@ class WindowNotifier extends _$WindowNotifier with AppLogger {
 
   Future<void> exit() async {
     await ref
-        .read(connectionNotifierProvider.notifier)
+        .read(connectionProvider.notifier)
         .abortConnection()
         .timeout(const Duration(seconds: 2))
         .catchError((e) {

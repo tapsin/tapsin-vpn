@@ -65,28 +65,28 @@ class SettingsPage extends HookConsumerWidget {
                 menuChildren: <Widget>[
                   MenuItemButton(
                     onPressed: () async => await ref
-                        .read(dialogNotifierProvider.notifier)
+                        .read(dialogProvider.notifier)
                         .showConfirmation(
                           title: t.common.msg.import.confirm,
                           message: t.dialogs.confirmation.settings.import.msg,
                         )
                         .then((shouldImport) async {
                           if (shouldImport) {
-                            await ref.read(configOptionNotifierProvider.notifier).importFromClipboard();
+                            await ref.read(configOptionProvider.notifier).importFromClipboard();
                           }
                         }),
                     child: Text(t.pages.settings.options.import.clipboard),
                   ),
                   MenuItemButton(
                     onPressed: () async => await ref
-                        .read(dialogNotifierProvider.notifier)
+                        .read(dialogProvider.notifier)
                         .showConfirmation(
                           title: t.common.msg.import.confirm,
                           message: t.dialogs.confirmation.settings.import.msg,
                         )
                         .then((shouldImport) async {
                           if (shouldImport) {
-                            await ref.read(configOptionNotifierProvider.notifier).importFromJsonFile();
+                            await ref.read(configOptionProvider.notifier).importFromJsonFile();
                           }
                         }),
                     child: Text(t.pages.settings.options.import.file),
@@ -97,23 +97,23 @@ class SettingsPage extends HookConsumerWidget {
               SubmenuButton(
                 menuChildren: <Widget>[
                   MenuItemButton(
-                    onPressed: () async => await ref.read(configOptionNotifierProvider.notifier).exportJsonClipboard(),
+                    onPressed: () async => await ref.read(configOptionProvider.notifier).exportJsonClipboard(),
                     child: Text(t.pages.settings.options.export.anonymousToClipboard),
                   ),
                   MenuItemButton(
-                    onPressed: () async => await ref.read(configOptionNotifierProvider.notifier).exportJsonFile(),
+                    onPressed: () async => await ref.read(configOptionProvider.notifier).exportJsonFile(),
                     child: Text(t.pages.settings.options.export.anonymousToFile),
                   ),
                   const PopupMenuDivider(),
                   MenuItemButton(
                     onPressed: () async => await ref
-                        .read(configOptionNotifierProvider.notifier)
+                        .read(configOptionProvider.notifier)
                         .exportJsonClipboard(excludePrivate: false),
                     child: Text(t.pages.settings.options.export.allToClipboard),
                   ),
                   MenuItemButton(
                     onPressed: () async =>
-                        await ref.read(configOptionNotifierProvider.notifier).exportJsonFile(excludePrivate: false),
+                        await ref.read(configOptionProvider.notifier).exportJsonFile(excludePrivate: false),
                     child: Text(t.pages.settings.options.export.allToFile),
                   ),
                 ],
@@ -122,7 +122,7 @@ class SettingsPage extends HookConsumerWidget {
               const PopupMenuDivider(),
               MenuItemButton(
                 child: Text(t.pages.settings.options.reset),
-                onPressed: () async => await ref.read(configOptionNotifierProvider.notifier).resetOption(),
+                onPressed: () async => await ref.read(configOptionProvider.notifier).resetOption(),
               ),
             ],
             builder: (context, controller, child) => IconButton(
@@ -180,7 +180,7 @@ class SettingsPage extends HookConsumerWidget {
                 title: Text(t.pages.settings.resetTunnel),
                 leading: const Icon(Icons.autorenew_rounded),
                 onTap: () async {
-                  await ref.read(resetTunnelNotifierProvider.notifier).run();
+                  await ref.read(resetTunnelProvider.notifier).run();
                 },
               ),
             ),

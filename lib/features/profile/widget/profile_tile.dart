@@ -55,14 +55,14 @@ class ProfileTile extends HookConsumerWidget {
     void handleTap() {
       if (isMain) {
         if (Breakpoint(context).isMobile()) {
-          ref.read(bottomSheetsNotifierProvider.notifier).showProfilesOverview();
+          ref.read(bottomSheetsProvider.notifier).showProfilesOverview();
         } else {
           context.goNamed('profiles');
         }
         return;
       }
       if (selectActiveMutation.state.isInProgress) return;
-      selectActiveMutation.setFuture(ref.read(profilesNotifierProvider.notifier).selectActiveProfile(profile.id));
+      selectActiveMutation.setFuture(ref.read(profilesProvider.notifier).selectActiveProfile(profile.id));
       if (context.canPop()) {
         context.pop();
       } else {
@@ -214,7 +214,7 @@ class ProfileActionButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(translationsProvider).requireValue;
-    final update = ref.watch(updateProfileNotifierProvider(profile.id));
+    final update = ref.watch(updateProfileProvider(profile.id));
     final isUpdating = update.isLoading;
     // Success/failure flash is derived straight from the provider state, which
     // UpdateProfileNotifier holds for 2s then resets. It lives in the provider
@@ -284,7 +284,7 @@ class ProfileActionButton extends HookConsumerWidget {
             child: InkWell(
               borderRadius: ProfileTileConst.startBorderRadius(Directionality.of(context), squareBottom: squareBottom),
               onTap: () => ref
-                  .read(updateProfileNotifierProvider(profile.id).notifier)
+                  .read(updateProfileProvider(profile.id).notifier)
                   .updateProfile(profile as RemoteProfileEntity),
               child: const Icon(Icons.sync_rounded),
             ),
@@ -351,17 +351,17 @@ class ProfileActionsMenu extends HookConsumerWidget {
       AdaptiveMenuItem(
         title: profile.pinned ? t.common.unpin : t.common.pin,
         leadingIcon: Icon(profile.pinned ? Icons.push_pin : Icons.push_pin_outlined),
-        onTap: () => ref.read(profilesNotifierProvider.notifier).togglePin(profile),
+        onTap: () => ref.read(profilesProvider.notifier).togglePin(profile),
       ),
       if (profile case RemoteProfileEntity())
         AdaptiveMenuItem(
           title: t.common.update,
           leadingIcon: const Icon(Icons.sync_rounded),
           onTap: () {
-            if (ref.read(updateProfileNotifierProvider(profile.id)).isLoading) {
+            if (ref.read(updateProfileProvider(profile.id)).isLoading) {
               return;
             }
-            ref.read(updateProfileNotifierProvider(profile.id).notifier).updateProfile(profile as RemoteProfileEntity);
+            ref.read(updateProfileProvider(profile.id).notifier).updateProfile(profile as RemoteProfileEntity);
           },
         ),
       AdaptiveMenuItem(
@@ -388,14 +388,14 @@ class ProfileActionsMenu extends HookConsumerWidget {
               onTap: () async {
                 final link = LinkParser.generateSubShareLink(url, name);
                 if (link.isNotEmpty) {
-                  await ref.read(dialogNotifierProvider.notifier).showQrCode(link, title: name);
+                  await ref.read(dialogProvider.notifier).showQrCode(link, title: name);
                 }
               },
             ),
           ],
           AdaptiveMenuItem(
             title: t.pages.profiles.share.jsonToClipboard,
-            onTap: () async => await ref.read(profilesNotifierProvider.notifier).exportConfigToClipboard(profile),
+            onTap: () async => await ref.read(profilesProvider.notifier).exportConfigToClipboard(profile),
           ),
         ],
       ),
@@ -411,14 +411,14 @@ class ProfileActionsMenu extends HookConsumerWidget {
         leadingIcon: const Icon(Icons.delete_outline_rounded),
         title: t.common.delete,
         onTap: () async => await ref
-            .read(dialogNotifierProvider.notifier)
+            .read(dialogProvider.notifier)
             .showConfirmation(
               title: t.dialogs.confirmation.profile.delete.title,
               message: t.dialogs.confirmation.profile.delete.msg,
             )
             .then((deleteConfirmed) async {
               if (!deleteConfirmed) return;
-              await ref.read(profilesNotifierProvider.notifier).deleteProfile(profile);
+              await ref.read(profilesProvider.notifier).deleteProfile(profile);
             }),
       ),
     ];
@@ -472,7 +472,7 @@ class ProfileLinkButtons extends HookConsumerWidget {
   /// anti-impersonation warning with a countdown, so scammers can't pass off a
   /// look-alike channel/site as an official one.
   static Future<void> _confirmAndOpen(WidgetRef ref, TranslationsEn t, String url) async {
-    final notifier = ref.read(dialogNotifierProvider.notifier);
+    final notifier = ref.read(dialogProvider.notifier);
     final bool confirmed;
     if (TrustedLinks.isTrusted(url)) {
       confirmed = await notifier.showConfirmation(

@@ -24,7 +24,7 @@ class RulePage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(translationsProvider).requireValue;
-    final isRuleEdited = ref.watch(IsRuleEditedProvider(ruleListOrder));
+    final isRuleEdited = ref.watch(isRuleEditedProvider(ruleListOrder));
     return Scaffold(
       appBar: AppBar(
         title: Text(t.pages.settings.routing.routeRule.rule.title),
@@ -32,7 +32,7 @@ class RulePage extends HookConsumerWidget {
           IconButton(
             onPressed: isRuleEdited
                 ? () async {
-                    await ref.read(ruleNotifierProvider(ruleListOrder).notifier).save();
+                    await ref.read(ruleProvider(ruleListOrder).notifier).save();
                     if (context.mounted) context.pop();
                   }
                 : null,
@@ -46,23 +46,23 @@ class RulePage extends HookConsumerWidget {
           children: [
             SettingText(
               title: RuleEnum.name.present(t),
-              value: ref.watch(ruleNotifierProvider(ruleListOrder).select((value) => value.name)),
+              value: ref.watch(ruleProvider(ruleListOrder).select((value) => value.name)),
               setValue: (value) =>
-                  ref.read(ruleNotifierProvider(ruleListOrder).notifier).update<String>(RuleEnum.name, value),
+                  ref.read(ruleProvider(ruleListOrder).notifier).update<String>(RuleEnum.name, value),
             ),
             SettingRadio<Outbound>(
               title: RuleEnum.outbound.present(t),
               values: Outbound.values,
-              value: ref.watch(ruleNotifierProvider(ruleListOrder).select((value) => value.outbound)),
+              value: ref.watch(ruleProvider(ruleListOrder).select((value) => value.outbound)),
               setValue: (value) =>
-                  ref.read(ruleNotifierProvider(ruleListOrder).notifier).update<Outbound>(RuleEnum.outbound, value),
+                  ref.read(ruleProvider(ruleListOrder).notifier).update<Outbound>(RuleEnum.outbound, value),
               defaultValue: Outbound.direct,
               t: t.pages.settings.routing.routeRule.rule.outbound,
             ),
             const SettingDivider(),
             SettingGenericList<String>(
               title: RuleEnum.ruleSet.present(t),
-              values: ref.watch(ruleNotifierProvider(ruleListOrder).select((value) => value.ruleSets)),
+              values: ref.watch(ruleProvider(ruleListOrder).select((value) => value.ruleSets)),
               useEllipsis: true,
               onTap: () => context.pushNamed(
                 'genericList',
@@ -72,7 +72,7 @@ class RulePage extends HookConsumerWidget {
             SettingDivider(title: t.pages.settings.routing.routeRule.rule.onlyTunMode),
             SettingGenericList<String>(
               title: RuleEnum.packageName.present(t),
-              values: ref.watch(ruleNotifierProvider(ruleListOrder).select((value) => value.packageNames)),
+              values: ref.watch(ruleProvider(ruleListOrder).select((value) => value.packageNames)),
               // other platforms can't list the installed apps, so they edit the names as text
               onTap: () => PlatformUtils.isAndroid
                   ? context.pushNamed('packageNames', pathParameters: {'orderId': ruleListOrder?.toString() ?? 'new'})
@@ -88,7 +88,7 @@ class RulePage extends HookConsumerWidget {
             ),
             SettingGenericList<String>(
               title: RuleEnum.processName.present(t),
-              values: ref.watch(ruleNotifierProvider(ruleListOrder).select((value) => value.processNames)),
+              values: ref.watch(ruleProvider(ruleListOrder).select((value) => value.processNames)),
               showPlatformWarning: !PlatformUtils.isDesktop,
               onTap: () => context.pushNamed(
                 'genericList',
@@ -97,7 +97,7 @@ class RulePage extends HookConsumerWidget {
             ),
             SettingGenericList<String>(
               title: RuleEnum.processPath.present(t),
-              values: ref.watch(ruleNotifierProvider(ruleListOrder).select((value) => value.processPaths)),
+              values: ref.watch(ruleProvider(ruleListOrder).select((value) => value.processPaths)),
               onTap: () => context.pushNamed(
                 'genericList',
                 pathParameters: {'orderId': ruleListOrder?.toString() ?? 'new', 'ruleEnum': RuleEnum.processPath.name},
@@ -108,15 +108,15 @@ class RulePage extends HookConsumerWidget {
             SettingRadio<Network>(
               title: RuleEnum.network.present(t),
               values: Network.values,
-              value: ref.watch(ruleNotifierProvider(ruleListOrder).select((value) => value.network)),
+              value: ref.watch(ruleProvider(ruleListOrder).select((value) => value.network)),
               setValue: (value) =>
-                  ref.read(ruleNotifierProvider(ruleListOrder).notifier).update<Network>(RuleEnum.network, value),
+                  ref.read(ruleProvider(ruleListOrder).notifier).update<Network>(RuleEnum.network, value),
               defaultValue: Network.all,
               t: t.pages.settings.routing.routeRule.rule.network,
             ),
             SettingGenericList<String>(
               title: RuleEnum.portRange.present(t),
-              values: ref.watch(ruleNotifierProvider(ruleListOrder).select((value) => value.portRanges)),
+              values: ref.watch(ruleProvider(ruleListOrder).select((value) => value.portRanges)),
               onTap: () => context.pushNamed(
                 'genericList',
                 pathParameters: {'orderId': ruleListOrder?.toString() ?? 'new', 'ruleEnum': RuleEnum.portRange.name},
@@ -124,7 +124,7 @@ class RulePage extends HookConsumerWidget {
             ),
             SettingGenericList<String>(
               title: RuleEnum.sourcePortRange.present(t),
-              values: ref.watch(ruleNotifierProvider(ruleListOrder).select((value) => value.sourcePortRanges)),
+              values: ref.watch(ruleProvider(ruleListOrder).select((value) => value.sourcePortRanges)),
               onTap: () => context.pushNamed(
                 'genericList',
                 pathParameters: {
@@ -136,16 +136,16 @@ class RulePage extends HookConsumerWidget {
             SettingCheckbox(
               title: RuleEnum.protocol.present(t),
               values: Protocol.values,
-              selectedValues: ref.watch(ruleNotifierProvider(ruleListOrder).select((value) => value.protocols)),
+              selectedValues: ref.watch(ruleProvider(ruleListOrder).select((value) => value.protocols)),
               setValue: (value) => ref
-                  .read(ruleNotifierProvider(ruleListOrder).notifier)
+                  .read(ruleProvider(ruleListOrder).notifier)
                   .update<List<ProtobufEnum>>(RuleEnum.protocol, value),
               t: t.pages.settings.routing.routeRule.rule.protocol,
             ),
             const SettingDivider(),
             SettingGenericList<String>(
               title: RuleEnum.ipCidr.present(t),
-              values: ref.watch(ruleNotifierProvider(ruleListOrder).select((value) => value.ipCidrs)),
+              values: ref.watch(ruleProvider(ruleListOrder).select((value) => value.ipCidrs)),
               onTap: () => context.pushNamed(
                 'genericList',
                 pathParameters: {'orderId': ruleListOrder?.toString() ?? 'new', 'ruleEnum': RuleEnum.ipCidr.name},
@@ -153,7 +153,7 @@ class RulePage extends HookConsumerWidget {
             ),
             SettingGenericList<String>(
               title: RuleEnum.sourceIpCidr.present(t),
-              values: ref.watch(ruleNotifierProvider(ruleListOrder).select((value) => value.sourceIpCidrs)),
+              values: ref.watch(ruleProvider(ruleListOrder).select((value) => value.sourceIpCidrs)),
               onTap: () => context.pushNamed(
                 'genericList',
                 pathParameters: {'orderId': ruleListOrder?.toString() ?? 'new', 'ruleEnum': RuleEnum.sourceIpCidr.name},
@@ -162,7 +162,7 @@ class RulePage extends HookConsumerWidget {
             const SettingDivider(),
             SettingGenericList<String>(
               title: RuleEnum.domain.present(t),
-              values: ref.watch(ruleNotifierProvider(ruleListOrder).select((value) => value.domains)),
+              values: ref.watch(ruleProvider(ruleListOrder).select((value) => value.domains)),
               onTap: () => context.pushNamed(
                 'genericList',
                 pathParameters: {'orderId': ruleListOrder?.toString() ?? 'new', 'ruleEnum': RuleEnum.domain.name},
@@ -170,7 +170,7 @@ class RulePage extends HookConsumerWidget {
             ),
             SettingGenericList<String>(
               title: RuleEnum.domainSuffix.present(t),
-              values: ref.watch(ruleNotifierProvider(ruleListOrder).select((value) => value.domainSuffixes)),
+              values: ref.watch(ruleProvider(ruleListOrder).select((value) => value.domainSuffixes)),
               onTap: () => context.pushNamed(
                 'genericList',
                 pathParameters: {'orderId': ruleListOrder?.toString() ?? 'new', 'ruleEnum': RuleEnum.domainSuffix.name},
@@ -178,7 +178,7 @@ class RulePage extends HookConsumerWidget {
             ),
             SettingGenericList<String>(
               title: RuleEnum.domainKeyword.present(t),
-              values: ref.watch(ruleNotifierProvider(ruleListOrder).select((value) => value.domainKeywords)),
+              values: ref.watch(ruleProvider(ruleListOrder).select((value) => value.domainKeywords)),
               onTap: () => context.pushNamed(
                 'genericList',
                 pathParameters: {
@@ -189,7 +189,7 @@ class RulePage extends HookConsumerWidget {
             ),
             SettingGenericList<String>(
               title: RuleEnum.domainRegex.present(t),
-              values: ref.watch(ruleNotifierProvider(ruleListOrder).select((value) => value.domainRegexes)),
+              values: ref.watch(ruleProvider(ruleListOrder).select((value) => value.domainRegexes)),
               onTap: () => context.pushNamed(
                 'genericList',
                 pathParameters: {'orderId': ruleListOrder?.toString() ?? 'new', 'ruleEnum': RuleEnum.domainRegex.name},

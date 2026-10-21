@@ -17,7 +17,7 @@ class ProfilesPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(translationsProvider).requireValue;
-    final asyncProfiles = ref.watch(profilesNotifierProvider);
+    final asyncProfiles = ref.watch(profilesProvider);
 
     ref.listen(hasAnyProfileProvider, (_, next) {
       if (next.value == false) {
@@ -30,12 +30,12 @@ class ProfilesPage extends HookConsumerWidget {
         title: Text(t.pages.profiles.title),
         actions: [
           IconButton(
-            onPressed: () => ref.read(foregroundProfilesUpdateNotifierProvider.notifier).trigger(),
+            onPressed: () => ref.read(foregroundProfilesUpdateProvider.notifier).trigger(),
             icon: const Icon(Icons.sync_rounded),
             tooltip: t.pages.profiles.updateSubscriptions,
           ),
           IconButton(
-            onPressed: () => ref.read(dialogNotifierProvider.notifier).showSortProfiles(),
+            onPressed: () => ref.read(dialogProvider.notifier).showSortProfiles(),
             icon: const Icon(Icons.sort_rounded),
             tooltip: t.common.sort,
           ),
@@ -43,7 +43,7 @@ class ProfilesPage extends HookConsumerWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async => await ref.read(bottomSheetsNotifierProvider.notifier).showAddProfile(),
+        onPressed: () async => await ref.read(bottomSheetsProvider.notifier).showAddProfile(),
         label: Text(t.pages.profiles.add),
         icon: const Icon(Icons.add_rounded),
       ),

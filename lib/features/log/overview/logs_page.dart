@@ -68,7 +68,7 @@ class _LogsPageState extends ConsumerState<LogsPage> with PresLogger {
     final visible = TickerMode.of(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      ref.read(logsOverviewNotifierProvider.notifier).setVisible(visible);
+      ref.read(logsOverviewProvider.notifier).setVisible(visible);
     });
   }
 
@@ -94,8 +94,8 @@ class _LogsPageState extends ConsumerState<LogsPage> with PresLogger {
   @override
   Widget build(BuildContext context) {
     final t = ref.watch(translationsProvider).requireValue;
-    final state = ref.watch(logsOverviewNotifierProvider);
-    final notifier = ref.watch(logsOverviewNotifierProvider.notifier);
+    final state = ref.watch(logsOverviewProvider);
+    final notifier = ref.watch(logsOverviewProvider.notifier);
 
     _stickToBottom();
 
@@ -123,7 +123,7 @@ class _LogsPageState extends ConsumerState<LogsPage> with PresLogger {
           ),
           IconButton(
             onPressed: () =>
-                ref.read(bottomSheetsNotifierProvider.notifier).showLogsShare(),
+                ref.read(bottomSheetsProvider.notifier).showLogsShare(),
             icon: const Icon(FluentIcons.share_20_regular),
             tooltip: t.common.share,
             iconSize: 20,
@@ -174,7 +174,7 @@ class _CoreLevelChip extends ConsumerWidget {
         if (value == null) return;
         // Read before the await: the status can change while it is in flight.
         final connected =
-            !(ref.read(connectionNotifierProvider).value?.isDisconnected ??
+            !(ref.read(connectionProvider).value?.isDisconnected ??
                 true);
         await ref.read(ConfigOptions.logLevel.notifier).update(value);
         // Nothing to reconnect while it is down — the next connection picks
@@ -205,7 +205,7 @@ class _BufferChip extends ConsumerWidget {
     return InkWell(
       onTap: () {
         final next = _sizes[(_sizes.indexOf(size) + 1) % _sizes.length];
-        ref.read(logsOverviewNotifierProvider.notifier).setCapacity(next);
+        ref.read(logsOverviewProvider.notifier).setCapacity(next);
       },
       borderRadius: BorderRadius.circular(8),
       child: Container(

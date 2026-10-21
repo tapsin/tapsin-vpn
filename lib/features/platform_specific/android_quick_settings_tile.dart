@@ -1,11 +1,11 @@
 // void setTileLable(Tile tile, WidgetRef ref) {
 //   final t = ref.watch(translationsProvider).requireValue;
-//   final connectionStatus = ref.watch(connectionNotifierProvider);
-//   final activeProfile = ref.watch(activeProfileProvider).valueOrNull;
+//   final connectionStatus = ref.watch(connectionProvider);
+//   final activeProfile = ref.watch(activeProfileProvider).value;
 //   tile.label = activeProfile?.name ?? t.general.appTitle;
 
-//   final activeProxy = ref.watch(activeProxyNotifierProvider);
-//   final delay = activeProxy.valueOrNull?.urlTestDelay ?? 0;
+//   final activeProxy = ref.watch(activeProxyProvider);
+//   final delay = activeProxy.value?.urlTestDelay ?? 0;
 
 //   tile.subtitle = switch (connectionStatus) {
 //     AsyncData(value: Connected()) when delay <= 0 || delay >= 65000 => t.connection.connecting,
@@ -16,7 +16,7 @@
 
 // // QuickSettings setup
 // void setupQuickSettings(WidgetRef ref) {
-//   final connectionStatus = ref.read(connectionNotifierProvider.notifier);
+//   final connectionStatus = ref.read(connectionProvider.notifier);
 //   @pragma("vm:entry-point")
 //   Tile onTileClicked(Tile tile) {
 //     final t = ref.read(translationsProvider).requireValue;

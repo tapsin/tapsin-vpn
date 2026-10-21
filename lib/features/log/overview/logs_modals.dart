@@ -61,7 +61,7 @@ class LogsShareModal extends ConsumerWidget {
             subtitle: Text(t.pages.logs.recentLogsMsg),
             onTap: () {
               Navigator.of(context).pop();
-              ref.read(bottomSheetsNotifierProvider.notifier).showLogsRecent();
+              ref.read(bottomSheetsProvider.notifier).showLogsRecent();
             },
           ),
           for (final (title, subtitle, file) in files)
@@ -108,7 +108,7 @@ class _LogsRecentModalState extends ConsumerState<LogsRecentModal> {
   @override
   void initState() {
     super.initState();
-    final pageState = ref.read(logsOverviewNotifierProvider);
+    final pageState = ref.read(logsOverviewProvider);
     _category = pageState.category;
     _minLevel = pageState.minLevel;
     _text = pageState.text;

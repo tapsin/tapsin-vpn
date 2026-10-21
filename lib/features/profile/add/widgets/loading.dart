@@ -25,7 +25,7 @@ class ProfileLoading extends ConsumerWidget {
           const Gap(8),
           TextButton(
             onPressed: () {
-              ref.invalidate(addProfileNotifierProvider);
+              ref.invalidate(addProfileProvider);
             },
             child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
           ),

@@ -116,7 +116,7 @@ class ConnectionRepositoryImpl with ExceptionHandler, InfraLogger implements Con
                 final isWarpEnabled =
                     overridedOptions.unblocker.mode.isWarp() || overridedOptions.extraSecurity.mode.isWarp();
                 if (!isWarpLicenseAgreed && isWarpEnabled) {
-                  final isAgreed = await ref.read(dialogNotifierProvider.notifier).showWarpLicense();
+                  final isAgreed = await ref.read(dialogProvider.notifier).showWarpLicense();
                   if (isAgreed == true) {
                     await ref.read(Preferences.warpConsentGiven.notifier).update(true);
                     // return (await applyConfigOption(prof).run()).match((l) => throw l, (_) => unit);
@@ -129,7 +129,7 @@ class ConnectionRepositoryImpl with ExceptionHandler, InfraLogger implements Con
                 final isPsiphonEnabled =
                     overridedOptions.unblocker.mode.isPsiphon() || overridedOptions.extraSecurity.mode.isPsiphon();
                 if (!isPsiphonLicenseAgreed && isPsiphonEnabled) {
-                  final isAgreed = await ref.read(dialogNotifierProvider.notifier).showPsiphonLicense();
+                  final isAgreed = await ref.read(dialogProvider.notifier).showPsiphonLicense();
                   if (isAgreed == true) {
                     await ref.read(Preferences.psiphonConsentGiven.notifier).update(true);
                   } else {

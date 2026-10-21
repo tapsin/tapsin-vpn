@@ -80,16 +80,16 @@ Future<void> lazyBootstrap(WidgetsBinding widgetsBinding, Environment env) async
   final debug = kDebugMode || container.read(ConfigOptions.logLevel).isVerbose;
 
   if (PlatformUtils.isDesktop) {
-    await _init("window controller", () => container.read(windowNotifierProvider.future));
+    await _init("window controller", () => container.read(windowProvider.future));
 
     final silentStart = container.read(Preferences.silentStart);
     Logger.bootstrap.debug("silent start [${silentStart ? "Enabled" : "Disabled"}]");
     if (!silentStart) {
-      await container.read(windowNotifierProvider.notifier).show(focus: false);
+      await container.read(windowProvider.notifier).show(focus: false);
     } else {
       Logger.bootstrap.debug("silent start, remain hidden accessible via tray");
     }
-    await _init("auto start service", () => container.read(autoStartNotifierProvider.future));
+    await _init("auto start service", () => container.read(autoStartProvider.future));
   }
   // phase 3 — a log file is worth its cost on desktop, or while debugging.
   // On a phone in release it only burns storage nobody reads.
@@ -109,26 +109,26 @@ Future<void> lazyBootstrap(WidgetsBinding widgetsBinding, Environment env) async
   await _safeInit("active profile", () => container.read(activeProfileProvider.future), timeout: 1000);
   await _init(
     "chain profile extra security",
-    () => container.read(chainProfileNotifierProvider(ChainType.extraSecurity).future),
+    () => container.read(chainProfileProvider(ChainType.extraSecurity).future),
   );
   await _init(
     "chain profile unblocker",
-    () => container.read(chainProfileNotifierProvider(ChainType.unblocker).future),
+    () => container.read(chainProfileProvider(ChainType.unblocker).future),
   );
   await _safeInit("hiddify-core", () => container.read(hiddifyCoreServiceProvider).init());
 
-  // Eagerly listen to activeProxyNotifierProvider to force synchronous evaluation in microtasks,
+  // Eagerly listen to activeProxyProvider to force synchronous evaluation in microtasks,
   // avoiding lazy build-phase flushes and sibling dependency collisions on the Home page.
-  container.listen(activeProxyNotifierProvider, (previous, next) {});
+  container.listen(activeProxyProvider, (previous, next) {});
 
   if (!kIsWeb) {
     if (PlatformUtils.isDesktop) {
       await _safeInit(
         "restore previous connection",
-        () => container.read(connectionNotifierProvider.notifier).restoreConnectionOnStartup(),
+        () => container.read(connectionProvider.notifier).restoreConnectionOnStartup(),
         timeout: 5000,
       );
-      await _safeInit("system tray", () => container.read(systemTrayNotifierProvider.future), timeout: 1000);
+      await _safeInit("system tray", () => container.read(systemTrayProvider.future), timeout: 1000);
     }
 
     if (PlatformUtils.isAndroid) {

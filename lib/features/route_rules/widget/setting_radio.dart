@@ -32,7 +32,7 @@ class SettingRadio<T> extends ConsumerWidget {
       subtitle: Text(textWithTranslation(value)),
       onTap: () async {
         final result = await ref
-            .read(dialogNotifierProvider.notifier)
+            .read(dialogProvider.notifier)
             .showSettingRadio<T>(title: title, values: values, value: value, defaultValue: defaultValue, t: t);
         if (result is T) setValue(result);
       },

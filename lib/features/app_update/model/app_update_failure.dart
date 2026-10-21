@@ -5,7 +5,7 @@ import 'package:hiddify/core/model/failures.dart';
 part 'app_update_failure.freezed.dart';
 
 @freezed
-sealed class AppUpdateFailure with _$AppUpdateFailure, Failure {
+class AppUpdateFailure with _$AppUpdateFailure, Failure {
   const AppUpdateFailure._();
 
   @With<UnexpectedFailure>()
@@ -15,6 +15,7 @@ sealed class AppUpdateFailure with _$AppUpdateFailure, Failure {
   ({String type, String? message}) present(TranslationsEn t) {
     return switch (this) {
       AppUpdateUnexpectedFailure() => (type: t.errors.unexpected, message: null),
+      _ => (type: t.errors.unexpected, message: null),
     };
   }
 }

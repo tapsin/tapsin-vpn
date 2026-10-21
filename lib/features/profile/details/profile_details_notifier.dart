@@ -105,7 +105,7 @@ class ProfileDetailsNotifier extends _$ProfileDetailsNotifier with AppLogger {
             return (await _profilesRepo.offlineUpdate(value.profile, value.configContent).run()).match(
               (l) async {
                 await ref
-                    .read(dialogNotifierProvider.notifier)
+                    .read(dialogProvider.notifier)
                     .showCustomAlertFromErr(
                       t.presentError(l, action: t.pages.profiles.msg.update.failureNamed(name: value.profile.name)),
                     );

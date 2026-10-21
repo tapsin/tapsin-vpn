@@ -31,12 +31,12 @@ class RoutingOptionsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(translationsProvider).requireValue;
-    final rules = ref.watch(rulesNotifierProvider);
+    final rules = ref.watch(rulesProvider);
 
     useMemoized(() {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (routeRule != null && context.mounted) {
-          await ref.read(rulesNotifierProvider.notifier).importRulesFromDeepLink(routeRule!);
+          await ref.read(rulesProvider.notifier).importRulesFromDeepLink(routeRule!);
         }
       });
     });
@@ -48,7 +48,7 @@ class RoutingOptionsPage extends HookConsumerWidget {
           PopupMenuButton(
             icon: const Icon(Icons.more_vert_rounded),
             itemBuilder: (_) {
-              final notifier = ref.read(rulesNotifierProvider.notifier);
+              final notifier = ref.read(rulesProvider.notifier);
               final options = t.pages.settings.routing.routeRule.options;
               return <PopupMenuEntry>[
                 PopupMenuItem(onTap: notifier.importRulesFromClipboard, child: Text(options.import.clipboard)),
@@ -76,7 +76,7 @@ class RoutingOptionsPage extends HookConsumerWidget {
             const _PinnedOptions(),
           ],
         ),
-        onReorder: ref.read(rulesNotifierProvider.notifier).reorder,
+        onReorder: ref.read(rulesProvider.notifier).reorder,
         itemBuilder: (context, index) => RuleTile(key: Key('$index'), index: index, rule: rules[index]),
         itemCount: rules.length,
       ),
@@ -278,7 +278,7 @@ class _AppListRow extends ConsumerWidget {
     final t = ref.watch(translationsProvider).requireValue;
     final theme = Theme.of(context);
     final appBasedRouting = t.pages.settings.routing.appBasedRouting;
-    final flags = ref.watch(AppListProvider(mode)).valueOrNull;
+    final flags = ref.watch(appListProvider(mode)).value;
     // the text sits close to the logos and is smaller than a list title; the row is 48 dp, like auto selection
     ListTile row({required Widget leading, required Widget title}) => ListTile(
       minTileHeight: 48,

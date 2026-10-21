@@ -5,8 +5,8 @@
 //   Widget build(BuildContext context, WidgetRef ref) {
 //     return Column();
 //     final t = ref.watch(translationsProvider).requireValue;
-//     final activeProxy = ref.watch(activeProxyNotifierProvider);
-//     // final ipInfo = ref.watch(ipInfoNotifierProvider);
+//     final activeProxy = ref.watch(activeProxyProvider);
+//     // final ipInfo = ref.watch(ipInfoProvider);
 
 //     return AnimatedVisibility(
 //       axis: Axis.vertical,
@@ -37,7 +37,7 @@
 //                             IPText(
 //                               ip: proxy.ipinfo.ip,
 //                               onLongPress: () async {
-//                                 ref.read(ipInfoNotifierProvider.notifier).refresh();
+//                                 ref.read(ipInfoProvider.notifier).refresh();
 //                               },
 //                             ),
 //                             // const Gap(8),
@@ -51,7 +51,7 @@
 //                             UnknownIPText(
 //                               text: t.proxies.checkIp,
 //                               onTap: () async {
-//                                 ref.read(ipInfoNotifierProvider.notifier).refresh();
+//                                 ref.read(ipInfoProvider.notifier).refresh();
 //                               },
 //                             ),
 //                           ],
@@ -66,7 +66,7 @@
 //                       //         IPText(
 //                       //           ip: info.ip,
 //                       //           onLongPress: () async {
-//                       //             ref.read(ipInfoNotifierProvider.notifier).refresh();
+//                       //             ref.read(ipInfoProvider.notifier).refresh();
 //                       //           },
 //                       //         ),
 //                       //         // const Gap(8),
@@ -79,7 +79,7 @@
 //                       //         UnknownIPText(
 //                       //           text: t.proxies.checkIp,
 //                       //           onTap: () async {
-//                       //             ref.read(ipInfoNotifierProvider.notifier).refresh();
+//                       //             ref.read(ipInfoProvider.notifier).refresh();
 //                       //           },
 //                       //         ),
 //                       //       ],
@@ -91,7 +91,7 @@
 //                       //         UnknownIPText(
 //                       //           text: t.proxies.unknownIp,
 //                       //           onTap: () async {
-//                       //             ref.read(ipInfoNotifierProvider.notifier).refresh();
+//                       //             ref.read(ipInfoProvider.notifier).refresh();
 //                       //           },
 //                       //         ),
 //                       //       ],
@@ -128,7 +128,7 @@
 //   @override
 //   Widget build(BuildContext context, WidgetRef ref) {
 //     final t = ref.watch(translationsProvider).requireValue;
-//     final stats = ref.watch(statsNotifierProvider).value;
+//     final stats = ref.watch(statsProvider).value;
 
 //     return Directionality(
 //       textDirection: TextDirection.values[(Directionality.of(context).index + 1) % TextDirection.values.length],

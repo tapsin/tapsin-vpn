@@ -40,13 +40,13 @@ class ShortcutWrapper extends HookConsumerWidget {
         actions: {
           CloseWindowIntent: CallbackAction(
             onInvoke: (_) async {
-              await ref.read(windowNotifierProvider.notifier).hide();
+              await ref.read(windowProvider.notifier).hide();
               return null;
             },
           ),
           QuitAppIntent: CallbackAction(
             onInvoke: (_) async {
-              await ref.read(windowNotifierProvider.notifier).exit();
+              await ref.read(windowProvider.notifier).exit();
               return null;
             },
           ),
@@ -62,7 +62,7 @@ class ShortcutWrapper extends HookConsumerWidget {
             onInvoke: (_) async {
               if (rootNavKey.currentContext != null) {
                 final captureResult = await Clipboard.getData(Clipboard.kTextPlain).then((value) => value?.text ?? '');
-                ref.read(bottomSheetsNotifierProvider.notifier).showAddProfile(url: captureResult);
+                ref.read(bottomSheetsProvider.notifier).showAddProfile(url: captureResult);
               }
               return null;
             },

@@ -33,7 +33,7 @@ class PackageNamesPage extends HookConsumerWidget {
     final theme = Theme.of(context);
     final localizations = MaterialLocalizations.of(context);
     final appBasedRouting = t.pages.settings.routing.appBasedRouting;
-    final rule = ruleNotifierProvider(ruleListOrder);
+    final rule = ruleProvider(ruleListOrder);
     final selected = ref.watch(rule.select((value) => value.packageNames)).toList();
 
     final hideSystemApps = useState(false);

@@ -16,9 +16,9 @@ class ProfilesModal extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(translationsProvider).requireValue;
-    final asyncProfiles = ref.watch(profilesNotifierProvider);
+    final asyncProfiles = ref.watch(profilesProvider);
 
-    ref.listen(profilesNotifierProvider, (_, next) {
+    ref.listen(profilesProvider, (_, next) {
       if (next.hasValue && next.value!.isEmpty) {
         if (context.canPop()) context.pop();
       }
@@ -57,7 +57,7 @@ class ProfilesModal extends HookConsumerWidget {
                         FilledButton.icon(
                           label: Text(t.common.sort, maxLines: 1, overflow: TextOverflow.ellipsis),
                           icon: const Icon(Icons.sort_rounded),
-                          onPressed: () => ref.read(dialogNotifierProvider.notifier).showSortProfiles(),
+                          onPressed: () => ref.read(dialogProvider.notifier).showSortProfiles(),
                         ),
                         FilledButton.icon(
                           label: Text(
@@ -66,7 +66,7 @@ class ProfilesModal extends HookConsumerWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                           icon: const Icon(Icons.sync_rounded),
-                          onPressed: () => ref.read(foregroundProfilesUpdateNotifierProvider.notifier).trigger(),
+                          onPressed: () => ref.read(foregroundProfilesUpdateProvider.notifier).trigger(),
                         ),
                       ],
                     ),

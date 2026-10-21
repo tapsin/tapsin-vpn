@@ -131,7 +131,7 @@ class ConnectionNotifier extends _$ConnectionNotifier with AppLogger {
         loggy.warning("error reconnecting", err);
         state = AsyncError(err, StackTrace.current);
         await ref
-            .read(dialogNotifierProvider.notifier)
+            .read(dialogProvider.notifier)
             .showCustomAlertFromErr(err.present(ref.read(translationsProvider).requireValue));
       }).run();
     }
@@ -169,7 +169,7 @@ class ConnectionNotifier extends _$ConnectionNotifier with AppLogger {
     }
     // Read before connecting: a failed start sends the core restart signal, which marks this
     // notifier out of date until the next frame, and debug builds refuse any ref call until then.
-    final dialogs = ref.read(dialogNotifierProvider.notifier);
+    final dialogs = ref.read(dialogProvider.notifier);
     final t = ref.read(translationsProvider).requireValue;
     final startedByUser = ref.read(Preferences.startedByUser.notifier);
     // The core reports Starting only once the config is built, about a second
@@ -196,7 +196,7 @@ class ConnectionNotifier extends _$ConnectionNotifier with AppLogger {
     await _connectionRepo.disconnect().mapLeft((err) {
       loggy.warning("error disconnecting", err);
       ref
-          .read(dialogNotifierProvider.notifier)
+          .read(dialogProvider.notifier)
           .showCustomAlertFromErr(err.present(ref.read(translationsProvider).requireValue));
       state = AsyncError(err, StackTrace.current);
     }).run();
@@ -206,7 +206,7 @@ class ConnectionNotifier extends _$ConnectionNotifier with AppLogger {
 @Riverpod(keepAlive: true)
 bool serviceRunning(Ref ref) {
   // ref.watch(coreRestartSignalProvider);
-  return ref.watch(connectionNotifierProvider).valueOrNull?.isConnected ?? false;
+  return ref.watch(connectionProvider).value?.isConnected ?? false;
 }
 
 class SingleCall {

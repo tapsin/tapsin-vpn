@@ -50,10 +50,10 @@ class GeneralPage extends HookConsumerWidget {
             SwitchListTile.adaptive(
               title: Text(t.pages.settings.general.autoStart),
               secondary: const Icon(Icons.auto_mode_rounded),
-              value: ref.watch(autoStartNotifierProvider).asData!.value,
+              value: ref.watch(autoStartProvider).asData!.value,
               onChanged: (value) async => value
-                  ? await ref.read(autoStartNotifierProvider.notifier).enable()
-                  : await ref.read(autoStartNotifierProvider.notifier).disable(),
+                  ? await ref.read(autoStartProvider.notifier).enable()
+                  : await ref.read(autoStartProvider.notifier).disable(),
             ),
             SwitchListTile.adaptive(
               title: Text(t.pages.settings.general.silentStart),
@@ -84,7 +84,7 @@ class GeneralPage extends HookConsumerWidget {
             subtitle: Text(ref.watch(ConfigOptions.urlTestInterval).toApproximateTime(isRelativeToNow: false)),
             leading: const Icon(Icons.timer_rounded),
             onTap: () async => await ref
-                .read(dialogNotifierProvider.notifier)
+                .read(dialogProvider.notifier)
                 .showSettingSlider(
                   title: t.pages.settings.general.urlTestInterval,
                   initialValue: ref.watch(ConfigOptions.urlTestInterval).inMinutes.coerceIn(0, 60).toDouble(),

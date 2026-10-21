@@ -27,7 +27,7 @@ class _WindowWrapperState extends ConsumerState<WindowWrapper> with WindowListen
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(windowNotifierProvider);
+    ref.watch(windowProvider);
 
     return widget.child;
   }
@@ -52,7 +52,7 @@ class _WindowWrapperState extends ConsumerState<WindowWrapper> with WindowListen
   @override
   Future<void> onWindowClose() async {
     if (rootNavKey.currentContext == null) {
-      await ref.read(windowNotifierProvider.notifier).hide();
+      await ref.read(windowProvider.notifier).hide();
       return;
     }
 
@@ -60,35 +60,35 @@ class _WindowWrapperState extends ConsumerState<WindowWrapper> with WindowListen
       case ActionsAtClosing.ask:
         if (isWindowClosingDialogOpened) return;
         isWindowClosingDialogOpened = true;
-        await ref.read(dialogNotifierProvider.notifier).showWindowClosing();
+        await ref.read(dialogProvider.notifier).showWindowClosing();
         isWindowClosingDialogOpened = false;
 
       case ActionsAtClosing.hide:
-        await ref.read(windowNotifierProvider.notifier).hide();
+        await ref.read(windowProvider.notifier).hide();
 
       case ActionsAtClosing.exit:
-        await ref.read(windowNotifierProvider.notifier).exit();
+        await ref.read(windowProvider.notifier).exit();
     }
   }
 
   @override
   Future<void> onWindowResized() async {
-    await ref.read(windowNotifierProvider.notifier).saveWindowState();
+    await ref.read(windowProvider.notifier).saveWindowState();
   }
 
   @override
   Future<void> onWindowMoved() async {
-    await ref.read(windowNotifierProvider.notifier).saveWindowState();
+    await ref.read(windowProvider.notifier).saveWindowState();
   }
 
   @override
   Future<void> onWindowMaximize() async {
-    await ref.read(windowNotifierProvider.notifier).saveWindowState();
+    await ref.read(windowProvider.notifier).saveWindowState();
   }
 
   @override
   Future<void> onWindowUnmaximize() async {
-    await ref.read(windowNotifierProvider.notifier).saveWindowState();
+    await ref.read(windowProvider.notifier).saveWindowState();
   }
 
   @override

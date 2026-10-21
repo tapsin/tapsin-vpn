@@ -29,14 +29,14 @@ enum _Look { loading, disconnected, connecting, connected, noPing, hotReloading,
 /// It comes before the ping checks, so a reload never looks like a ping problem.
 _Look _lookOf(AsyncValue<ConnectionStatus> status, int delay, bool hotReloading) => switch (status) {
   AsyncError() => _Look.failed,
-  AsyncValue(valueOrNull: Disconnected(connectionFailure: _?)) => _Look.failed,
-  AsyncValue(valueOrNull: Disconnected()) => _Look.disconnected,
-  AsyncValue(valueOrNull: Connecting()) => _Look.connecting,
-  AsyncValue(valueOrNull: Connected()) when hotReloading => _Look.hotReloading,
-  AsyncValue(valueOrNull: Connected()) when delay == 0 => _Look.connecting,
-  AsyncValue(valueOrNull: Connected()) when !ConnectionConst.isValidDelay(delay) => _Look.noPing,
-  AsyncValue(valueOrNull: Connected()) => _Look.connected,
-  AsyncValue(valueOrNull: Disconnecting()) => _Look.disconnecting,
+  AsyncValue(value: Disconnected(connectionFailure: _?)) => _Look.failed,
+  AsyncValue(value: Disconnected()) => _Look.disconnected,
+  AsyncValue(value: Connecting()) => _Look.connecting,
+  AsyncValue(value: Connected()) when hotReloading => _Look.hotReloading,
+  AsyncValue(value: Connected()) when delay == 0 => _Look.connecting,
+  AsyncValue(value: Connected()) when !ConnectionConst.isValidDelay(delay) => _Look.noPing,
+  AsyncValue(value: Connected()) => _Look.connected,
+  AsyncValue(value: Disconnecting()) => _Look.disconnecting,
   _ => _Look.loading,
 };
 
@@ -46,11 +46,11 @@ class ConnectionButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(translationsProvider).requireValue;
-    final status = ref.watch(connectionNotifierProvider);
+    final status = ref.watch(connectionProvider);
     // After a disconnect Riverpod keeps the last ping as the previous value,
     // which would show the next connection as up before its own ping answers.
-    final delay = ref.watch(activeProxyNotifierProvider).unwrapPrevious().valueOrNull?.urlTestDelay ?? 0;
-    final hotReloading = ref.watch(hotReloadingProvider).valueOrNull ?? false;
+    final delay = ref.watch(activeProxyProvider).unwrapPrevious().value?.urlTestDelay ?? 0;
+    final hotReloading = ref.watch(hotReloadingProvider).value ?? false;
     final look = _lookOf(status, delay, hotReloading);
 
     // What a tap does follows the core alone: a tunnel that is up can be
@@ -59,7 +59,7 @@ class ConnectionButton extends HookConsumerWidget {
     final onTap = switch (status) {
       AsyncData(value: Connected()) when hotReloading => null,
       AsyncData(value: Disconnected()) || AsyncError() => () => _connect(ref),
-      AsyncData(value: Connected()) => () => ref.read(connectionNotifierProvider.notifier).toggleConnection(),
+      AsyncData(value: Connected()) => () => ref.read(connectionProvider.notifier).toggleConnection(),
       _ => null,
     };
 
@@ -94,14 +94,14 @@ class ConnectionButton extends HookConsumerWidget {
 
   /// Connects, or sends the user to add a profile when there is none.
   Future<void> _connect(WidgetRef ref) async {
-    final dialogs = ref.read(dialogNotifierProvider.notifier);
-    if (ref.read(activeProfileProvider).valueOrNull == null) {
+    final dialogs = ref.read(dialogProvider.notifier);
+    if (ref.read(activeProfileProvider).value == null) {
       await dialogs.showNoActiveProfile();
-      ref.read(bottomSheetsNotifierProvider.notifier).showAddProfile();
+      ref.read(bottomSheetsProvider.notifier).showAddProfile();
       return;
     }
     if (await dialogs.showExperimentalFeatureNotice()) {
-      await ref.read(connectionNotifierProvider.notifier).toggleConnection();
+      await ref.read(connectionProvider.notifier).toggleConnection();
     }
   }
 }

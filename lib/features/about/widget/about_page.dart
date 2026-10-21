@@ -23,14 +23,14 @@ class AboutPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(translationsProvider).requireValue;
     final appInfo = ref.watch(appInfoProvider).requireValue;
-    final appUpdate = ref.watch(appUpdateNotifierProvider);
+    final appUpdate = ref.watch(appUpdateProvider);
 
-    ref.listen(appUpdateNotifierProvider, (_, next) async {
+    ref.listen(appUpdateProvider, (_, next) async {
       if (!context.mounted) return;
       switch (next) {
         case AppUpdateStateAvailable(:final versionInfo) || AppUpdateStateIgnored(:final versionInfo):
           return await ref
-              .read(dialogNotifierProvider.notifier)
+              .read(dialogProvider.notifier)
               .showNewVersion(currentVersion: appInfo.presentVersion, newVersion: versionInfo, canIgnore: false);
         case AppUpdateStateError(:final error):
           return ref.read(inAppNotificationControllerProvider).showErrorToast(t.presentShortError(error));
@@ -48,7 +48,7 @@ class AboutPage extends HookConsumerWidget {
             _ => const Icon(FluentIcons.arrow_sync_24_regular),
           },
           onTap: () async {
-            await ref.read(appUpdateNotifierProvider.notifier).check();
+            await ref.read(appUpdateProvider.notifier).check();
           },
         ),
       if (PlatformUtils.isDesktop)

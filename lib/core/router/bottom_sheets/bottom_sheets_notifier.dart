@@ -59,7 +59,7 @@ class BottomSheetsNotifier extends _$BottomSheetsNotifier {
       // Preventing Zero-click SSRF
       final t = ref.watch(translationsProvider).requireValue;
       final isConfirmed = await ref
-          .read(dialogNotifierProvider.notifier)
+          .read(dialogProvider.notifier)
           .showConfirmation(
             title: t.dialogs.confirmation.addProfileByDeepLinkWarning.title,
             message: t.dialogs.confirmation.addProfileByDeepLinkWarning.message(host: _deepLinkHost(url)),

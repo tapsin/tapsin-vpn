@@ -92,14 +92,14 @@ class RoutingConfigNotifier extends _$RoutingConfigNotifier {
           if (url != null && Uri.parse(url).host == 'import') {
             WidgetsBinding.instance.addPostFrameCallback(
               (_) =>
-                  ref.read(bottomSheetsNotifierProvider.notifier).showAddProfile(url: url, triggeredByDeepLink: true),
+                  ref.read(bottomSheetsProvider.notifier).showAddProfile(url: url, triggeredByDeepLink: true),
             );
           }
           return '/home';
         } else if (url != null && Uri.parse(url).host == 'import') {
           // Auto import profile from url
           WidgetsBinding.instance.addPostFrameCallback(
-            (_) => ref.read(bottomSheetsNotifierProvider.notifier).showAddProfile(url: url, triggeredByDeepLink: true),
+            (_) => ref.read(bottomSheetsProvider.notifier).showAddProfile(url: url, triggeredByDeepLink: true),
           );
           return '/home';
         } else if (url != null) {
@@ -205,9 +205,9 @@ class RoutingConfigNotifier extends _$RoutingConfigNotifier {
                           onExit: (context, state) async {
                             final t = ref.read(translationsProvider).requireValue;
                             final orderId = int.tryParse(state.pathParameters['orderId']!);
-                            final isRuleEdited = ref.read(IsRuleEditedProvider(orderId));
+                            final isRuleEdited = ref.read(isRuleEditedProvider(orderId));
                             if (orderId != null && isRuleEdited) {
-                              await ref.read(ruleNotifierProvider(orderId).notifier).save();
+                              await ref.read(ruleProvider(orderId).notifier).save();
                               ref
                                   .read(inAppNotificationControllerProvider)
                                   .showSuccessToast(t.common.msg.autoSave.success);

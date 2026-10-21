@@ -1,6 +1,15 @@
 targets:
   $default:
     builders:
+      circle_flags:assetsToCache:
+        enabled: false
+      circle_flags:combineFlagFile:
+        enabled: false
+      flutter_gen_runner:flutter_gen:
+        enabled: false
+      freezed:
+        options:
+          to_string_override: false
       json_serializable:
         options:
           explicit_to_json: true

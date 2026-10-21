@@ -38,14 +38,14 @@ class RuleTile extends HookConsumerWidget {
   Future handleDelete(BuildContext context, WidgetRef ref) async {
     final t = ref.watch(translationsProvider).requireValue;
     final result = await ref
-        .read(dialogNotifierProvider.notifier)
+        .read(dialogProvider.notifier)
         .showConfirmation(
           title: t.dialogs.confirmation.routeRule.delete.title,
           message: t.dialogs.confirmation.routeRule.delete.msg(rulename: rule.name),
           positiveBtnTxt: t.common.delete,
         );
     if (result == true) {
-      await ref.read(rulesNotifierProvider.notifier).deleteRule(rule.listOrder);
+      await ref.read(rulesProvider.notifier).deleteRule(rule.listOrder);
     }
   }
 
@@ -56,7 +56,7 @@ class RuleTile extends HookConsumerWidget {
     final builtin = BuiltinRule.of(rule);
     final region = ref.watch(ConfigOptions.region);
     final scrollController = useScrollController();
-    ref.listen(rulesNotifierProvider, (_, _) {
+    ref.listen(rulesProvider, (_, _) {
       if (scrollController.offset > 0) scrollController.jumpTo(0);
     });
     return Material(
@@ -115,7 +115,7 @@ class RuleTile extends HookConsumerWidget {
               trailing: Switch(
                 value: rule.enabled,
                 onChanged: (value) async =>
-                    await ref.read(rulesNotifierProvider.notifier).updateEnabled(value, rule.listOrder),
+                    await ref.read(rulesProvider.notifier).updateEnabled(value, rule.listOrder),
               ),
             ),
             SettingDetailChips<MapEntry>(

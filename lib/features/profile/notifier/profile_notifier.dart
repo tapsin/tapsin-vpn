@@ -47,9 +47,11 @@ class AddProfileNotifier extends _$AddProfileNotifier with AppLogger {
             return;
           } else {
             ref
-                .read(dialogNotifierProvider.notifier)
+                .read(dialogProvider.notifier)
                 .showCustomAlertFromErr(t.presentError(error, action: t.pages.profiles.msg.add.failure));
           }
+        default:
+          break;
       }
     });
     ref.onDispose(() {
@@ -170,7 +172,7 @@ class UpdateProfileNotifier extends _$UpdateProfileNotifier with AppLogger {
 
               await ref.read(activeProfileProvider.future).then((active) async {
                 if (active != null && active.id == profile.id) {
-                  await ref.read(connectionNotifierProvider.notifier).reconnect(profile);
+                  await ref.read(connectionProvider.notifier).reconnect(profile);
                 }
               });
               return unit;
@@ -185,7 +187,7 @@ class UpdateProfileNotifier extends _$UpdateProfileNotifier with AppLogger {
     if (state case AsyncError(:final error) when !isBulk) {
       final t = ref.read(translationsProvider).requireValue;
       ref
-          .read(dialogNotifierProvider.notifier)
+          .read(dialogProvider.notifier)
           .showCustomAlertFromErr(t.presentError(error, action: t.pages.profiles.msg.update.failure));
     }
 
@@ -235,7 +237,7 @@ class FreeProfilesNotifier extends _$FreeProfilesNotifier {
 
 @riverpod
 Future<List<FreeProfile>> freeProfilesFilteredByRegion(Ref ref) async {
-  final freeProfiles = await ref.watch(freeProfilesNotifierProvider.future);
+  final freeProfiles = await ref.watch(freeProfilesProvider.future);
   final region = ref.watch(ConfigOptions.region);
   return freeProfiles.where((e) => e.region.contains(region.name) || e.region.isEmpty).toList();
 }

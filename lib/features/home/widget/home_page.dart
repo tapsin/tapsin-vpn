@@ -65,7 +65,7 @@ class HomePage extends HookConsumerWidget {
             label: t.pages.profiles.add,
             child: IconButton(
               icon: Icon(Icons.add_rounded, color: theme.colorScheme.primary),
-              onPressed: () => ref.read(bottomSheetsNotifierProvider.notifier).showAddProfile(),
+              onPressed: () => ref.read(bottomSheetsProvider.notifier).showAddProfile(),
             ),
           ),
           const Gap(8),
@@ -157,7 +157,7 @@ class HomePage extends HookConsumerWidget {
                           topLeft: Radius.circular(16),
                           topRight: Radius.circular(16),
                         ),
-                        onTap: () => ref.read(bottomSheetsNotifierProvider.notifier).showQuickSettings(),
+                        onTap: () => ref.read(bottomSheetsProvider.notifier).showQuickSettings(),
                         child: Container(
                           height: 32,
                           padding: const EdgeInsetsDirectional.only(start: 16, end: 8),

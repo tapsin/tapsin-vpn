@@ -46,7 +46,7 @@ class ProfilesSortNotifier extends _$ProfilesSortNotifier with AppLogger {
 class ProfilesNotifier extends _$ProfilesNotifier with AppLogger {
   @override
   Stream<List<ProfileEntity>> build() {
-    final sort = ref.watch(profilesSortNotifierProvider);
+    final sort = ref.watch(profilesSortProvider);
     return _profilesRepo.watchAll(sort: sort.by, sortMode: sort.mode).map((event) => event.getOrElse((l) => throw l));
   }
 
@@ -72,7 +72,7 @@ class ProfilesNotifier extends _$ProfilesNotifier with AppLogger {
   Future<void> deleteProfile(ProfileEntity profile) async {
     loggy.debug('deleting profile: ${profile.name}');
 
-    if (profile.active) await ref.read(connectionNotifierProvider.notifier).abortConnection();
+    if (profile.active) await ref.read(connectionProvider.notifier).abortConnection();
     await _profilesRepo
         .deleteById(profile.id, profile.active)
         .match(

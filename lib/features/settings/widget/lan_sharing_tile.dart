@@ -74,7 +74,7 @@ class LanSharingPreferenceWidget extends HookConsumerWidget {
       );
       final link = 'socks://${credentials.username}:${credentials.password}@${credentials.ip}:${credentials.port}';
       await ref
-          .read(dialogNotifierProvider.notifier)
+          .read(dialogProvider.notifier)
           .showQrCode(
             '#profile-title: $_profileName\n$link#$_profileName',
             title: _profileName,

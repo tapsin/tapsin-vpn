@@ -61,7 +61,7 @@ class ProxyTile extends HookConsumerWidget with PresLogger {
       selected: selected,
       selectedTileColor: theme.colorScheme.primaryContainer,
       onTap: onTap,
-      onLongPress: () async => await ref.read(dialogNotifierProvider.notifier).showProxyInfo(outboundInfo: proxy),
+      onLongPress: () async => await ref.read(dialogProvider.notifier).showProxyInfo(outboundInfo: proxy),
       horizontalTitleGap: 4,
     );
   }

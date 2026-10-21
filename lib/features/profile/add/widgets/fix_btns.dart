@@ -31,7 +31,7 @@ class FixBtns extends ConsumerWidget {
           icon: Icons.content_paste,
           onTap: () async {
             final cr = await Clipboard.getData(Clipboard.kTextPlain).then((value) => value?.text ?? '');
-            ref.read(addProfileNotifierProvider.notifier).addClipboard(cr);
+            ref.read(addProfileProvider.notifier).addClipboard(cr);
           },
         ),
         const Gap(AddProfileModalConst.fixBtnsGap),
@@ -55,7 +55,7 @@ class FixBtns extends ConsumerWidget {
               if (!await file.exists()) return;
               bytes = await file.readAsBytes();
             }
-            final notifier = ref.read(addProfileNotifierProvider.notifier);
+            final notifier = ref.read(addProfileProvider.notifier);
             if (picked.extension?.toLowerCase() == 'zip') {
               notifier.addArchive(bytes, name: picked.name.replaceFirst(RegExp(r'\.zip$', caseSensitive: false), ''));
             } else {
@@ -71,9 +71,9 @@ class FixBtns extends ConsumerWidget {
             title: t.common.scanQr,
             icon: Icons.qr_code_scanner,
             onTap: () async {
-              final cr = await ref.read(dialogNotifierProvider.notifier).showQrScanner();
+              final cr = await ref.read(dialogProvider.notifier).showQrScanner();
               if (cr == null) return;
-              ref.read(addProfileNotifierProvider.notifier).addClipboard(cr);
+              ref.read(addProfileProvider.notifier).addClipboard(cr);
             },
           ),
         ],
@@ -84,7 +84,7 @@ class FixBtns extends ConsumerWidget {
           title: t.common.manually,
           icon: Icons.add,
           onTap: () {
-            ref.read(addProfilePageNotifierProvider.notifier).goManual();
+            ref.read(addProfilePageProvider.notifier).goManual();
           },
         ),
         const Gap(AddProfileModalConst.fixBtnsGap),

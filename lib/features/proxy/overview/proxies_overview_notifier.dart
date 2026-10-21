@@ -66,7 +66,7 @@ class ProxiesOverviewNotifier extends _$ProxiesOverviewNotifier with AppLogger {
     if (!serviceRunning) {
       return Stream.error(const ServiceNotRunning());
     }
-    final sortBy = ref.watch(proxiesSortNotifierProvider);
+    final sortBy = ref.watch(proxiesSortProvider);
     // yield* ref
     //     .watch(proxyRepositoryProvider)
     //     .watchProxies()

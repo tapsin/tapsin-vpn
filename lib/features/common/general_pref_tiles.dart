@@ -23,7 +23,7 @@ class LocalePrefTile extends ConsumerWidget {
       leading: const Icon(Icons.translate_rounded),
       onTap: () async {
         final selectedLocale = await ref
-            .read(dialogNotifierProvider.notifier)
+            .read(dialogProvider.notifier)
             .showSettingPicker<AppLocale>(
               title: t.pages.settings.general.locale,
               selected: locale,
@@ -89,7 +89,7 @@ class ThemeModePrefTile extends ConsumerWidget {
       }),
       onTap: () async {
         final selectedThemeMode = await ref
-            .read(dialogNotifierProvider.notifier)
+            .read(dialogProvider.notifier)
             .showSettingPicker<AppThemeMode>(
               title: t.pages.settings.general.themeMode,
               selected: themeMode,
@@ -119,7 +119,7 @@ class ClosingPrefTile extends ConsumerWidget {
       subtitle: Text(action.present(t)),
       leading: const Icon(Icons.logout_rounded),
       onTap: () async {
-        final selectedAction = await ref.read(dialogNotifierProvider.notifier).showActionAtClosing(selected: action);
+        final selectedAction = await ref.read(dialogProvider.notifier).showActionAtClosing(selected: action);
         if (selectedAction != null) {
           await ref.read(Preferences.actionAtClose.notifier).update(selectedAction);
         }

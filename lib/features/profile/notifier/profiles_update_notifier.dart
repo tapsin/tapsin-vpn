@@ -102,8 +102,8 @@ class ForegroundProfilesUpdateNotifier extends _$ForegroundProfilesUpdateNotifie
       // Sequential on purpose: validation and the active-profile reconnect share
       // one native core that is not safe to call concurrently (it can hang).
       for (final profile in toUpdate) {
-        await ref.read(updateProfileNotifierProvider(profile.id).notifier).updateProfile(profile, isBulk: true);
-        if (ref.read(updateProfileNotifierProvider(profile.id)).hasError) {
+        await ref.read(updateProfileProvider(profile.id).notifier).updateProfile(profile, isBulk: true);
+        if (ref.read(updateProfileProvider(profile.id)).hasError) {
           failedNames.add(profile.name);
         } else {
           successCount++;

@@ -20,7 +20,7 @@ class ChainOptionsPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(translationsProvider).requireValue;
     final theme = Theme.of(context);
-    final profiles = ref.watch(profilesNotifierProvider).value ?? [];
+    final profiles = ref.watch(profilesProvider).value ?? [];
     return Scaffold(
       appBar: AppBar(title: Text(t.pages.settings.chain.title)),
       body: ListView(
@@ -62,7 +62,7 @@ class ChainOptionsPage extends HookConsumerWidget {
                     ],
                     ChainMode.profile => [
                       ChoicePreferenceWidget(
-                        selected: ref.watch(chainProfileNotifierProvider(ChainType.extraSecurity)).value,
+                        selected: ref.watch(chainProfileProvider(ChainType.extraSecurity)).value,
                         preferences: ref.watch(ConfigOptions.extraSecurityProfileId.notifier),
                         choices: profiles,
                         title: t.pages.settings.chain.profile.selectProfile,
@@ -177,7 +177,7 @@ class ChainOptionsPage extends HookConsumerWidget {
                     ],
                     ChainMode.profile => [
                       ChoicePreferenceWidget(
-                        selected: ref.watch(chainProfileNotifierProvider(ChainType.unblocker)).value,
+                        selected: ref.watch(chainProfileProvider(ChainType.unblocker)).value,
                         preferences: ref.watch(ConfigOptions.unblockerProfileId.notifier),
                         choices: profiles,
                         title: t.pages.settings.chain.profile.selectProfile,
@@ -191,6 +191,7 @@ class ChainOptionsPage extends HookConsumerWidget {
                         },
                       ),
                     ],
+                    _ => [],
                   }
                 : [],
           ),

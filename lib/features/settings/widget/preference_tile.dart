@@ -5,6 +5,7 @@ import 'package:hiddify/core/utils/preferences_utils.dart';
 import 'package:hiddify/features/proxy/active/ip_widget.dart';
 import 'package:hiddify/features/settings/notifier/battery_optimization/battery_optimizations_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hooks_riverpod/legacy.dart';
 
 class ValuePreferenceWidget<T> extends HookConsumerWidget {
   const ValuePreferenceWidget({
@@ -47,7 +48,7 @@ class ValuePreferenceWidget<T> extends HookConsumerWidget {
       // ),
       onTap: () async {
         final inputValue = await ref
-            .read(dialogNotifierProvider.notifier)
+            .read(dialogProvider.notifier)
             .showSettingInput(
               title: title,
               initialValue: value,
@@ -121,7 +122,7 @@ class ChoicePreferenceWidget<T> extends HookConsumerWidget {
       enabled: enabled,
       onTap: () async {
         final selection = await ref
-            .read(dialogNotifierProvider.notifier)
+            .read(dialogProvider.notifier)
             .showSettingPicker<T>(
               title: title,
               showFlag: showFlag,
@@ -160,7 +161,7 @@ class BatteryOptimizationWidget extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(translationsProvider).requireValue;
 
-    final isIgnoringBatteryOptimizations = ref.watch(batteryOptimizationNotifierProvider);
+    final isIgnoringBatteryOptimizations = ref.watch(batteryOptimizationProvider);
 
     return isIgnoringBatteryOptimizations.when(
       data: (isIgnored) => isIgnored
@@ -170,7 +171,7 @@ class BatteryOptimizationWidget extends HookConsumerWidget {
               subtitle: Text(t.pages.settings.general.ignoreBatteryOptimizationsMsg),
               leading: const Icon(Icons.battery_saver_rounded),
               onTap: () async {
-                await ref.read(batteryOptimizationNotifierProvider.notifier).requestToIgnore();
+                await ref.read(batteryOptimizationProvider.notifier).requestToIgnore();
               },
             ),
       error: (_, _) => const SizedBox(),

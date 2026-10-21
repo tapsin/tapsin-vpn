@@ -19,10 +19,10 @@ class AddProfileModal extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = ref.watch(addProfileNotifierProvider).isLoading;
-    final currentWidget = ref.watch(addProfilePageNotifierProvider);
-    ref.listen(freeSwitchNotifierProvider, (_, _) {});
-    ref.listen(addProfileNotifierProvider, (previous, next) {
+    final isLoading = ref.watch(addProfileProvider).isLoading;
+    final currentWidget = ref.watch(addProfilePageProvider);
+    ref.listen(freeSwitchProvider, (_, _) {});
+    ref.listen(addProfileProvider, (previous, next) {
       if (next case AsyncData(value: final _?)) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (context.mounted && context.canPop()) context.pop();
@@ -34,7 +34,7 @@ class AddProfileModal extends HookConsumerWidget {
       await Future.delayed(const Duration(milliseconds: 200));
       if (url != null && context.mounted) {
         if (isLoading) return;
-        ref.read(addProfileNotifierProvider.notifier).addClipboard(url!);
+        ref.read(addProfileProvider.notifier).addClipboard(url!);
       }
     });
     return SafeArea(
@@ -43,6 +43,7 @@ class AddProfileModal extends HookConsumerWidget {
           : switch (currentWidget) {
               AddProfilePages.options => const AddProfileOptions(),
               AddProfilePages.manual => const AddProfileManual(),
+              _ => const AddProfileOptions(),
             },
     );
   }
@@ -52,8 +53,8 @@ class AddProfileOptions extends HookConsumerWidget {
   const AddProfileOptions({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final isLoadingProfile = ref.watch(addProfileNotifierProvider).isLoading;
-    final freeSwitch = ref.watch(freeSwitchNotifierProvider);
+    // final isLoadingProfile = ref.watch(addProfileProvider).isLoading;
+    final freeSwitch = ref.watch(freeSwitchProvider);
     final isDesktop = PlatformUtils.isDesktop;
     final gapCount = isDesktop ? AddProfileModalConst.fixBtnsGapCountDesktop : AddProfileModalConst.fixBtnsGapCount;
     final itemCount = isDesktop ? AddProfileModalConst.fixBtnsItemCountDesktop : AddProfileModalConst.fixBtnsItemCount;
@@ -135,7 +136,7 @@ class AddProfileManual extends HookConsumerWidget {
                 Expanded(child: Text(t.common.manually, style: theme.textTheme.headlineMedium)),
                 IconButton(
                   icon: const Icon(Icons.close),
-                  onPressed: () => ref.read(addProfilePageNotifierProvider.notifier).goOptions(),
+                  onPressed: () => ref.read(addProfilePageProvider.notifier).goOptions(),
                 ),
               ],
             ),
@@ -246,7 +247,7 @@ class AddProfileManual extends HookConsumerWidget {
                             ? token
                             : '${Constants.subscriptionBaseUrl}$token';
                         await ref
-                            .read(addProfileNotifierProvider.notifier)
+                            .read(addProfileProvider.notifier)
                             .addManual(
                               url: fullUrl,
                               userOverride: UserOverride(

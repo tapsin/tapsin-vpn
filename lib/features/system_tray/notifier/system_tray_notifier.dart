@@ -34,14 +34,14 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with TrayListener, AppLogg
   Future<void> _initializeTray() async {
     final t = await ref.watch(translationsProvider.future);
     final urlTestDelay = await ref
-        .watch(activeProxyNotifierProvider.future)
+        .watch(activeProxyProvider.future)
         .catchError((e) {
           loggy.warning("error getting active proxy", e);
           return OutboundInfo(urlTestDelay: 0);
         })
         .then((connection) => connection.urlTestDelay);
     final connection = await ref
-        .watch(connectionNotifierProvider.future)
+        .watch(connectionProvider.future)
         .catchError((e) {
           loggy.warning("error getting connection status", e);
           return const ConnectionStatus.disconnected();
@@ -126,14 +126,14 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with TrayListener, AppLogg
   @override
   Future<void> onTrayMenuItemClick(MenuItem menuItem) async {
     // if (menuItem.key == 'dashboard') {
-    //   await ref.read(windowNotifierProvider.notifier).open();
+    //   await ref.read(windowProvider.notifier).open();
     // }
     if (menuItem.key == 'dashboard') {
-      await ref.read(windowNotifierProvider.notifier).show();
+      await ref.read(windowProvider.notifier).show();
     } else if (menuItem.key == 'connection') {
-      await ref.read(connectionNotifierProvider.notifier).toggleConnection();
+      await ref.read(connectionProvider.notifier).toggleConnection();
     } else if (menuItem.key == 'quit') {
-      await ref.read(windowNotifierProvider.notifier).exit();
+      await ref.read(windowProvider.notifier).exit();
     } else {
       final newMode = ServiceMode.values.byName(menuItem.key!);
       loggy.debug("switching service mode: [$newMode]");
@@ -146,9 +146,9 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with TrayListener, AppLogg
     // if (Platform.isMacOS) {
     //   await trayManager.popUpContextMenu();
     // } else {
-    //   await ref.read(windowNotifierProvider.notifier).hideOrShow();
+    //   await ref.read(windowProvider.notifier).hideOrShow();
     // }
-    await ref.read(windowNotifierProvider.notifier).showOrHide();
+    await ref.read(windowProvider.notifier).showOrHide();
   }
 
   @override
@@ -163,12 +163,12 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with TrayListener, AppLogg
 //   Future<void> build() async {
 //     if (!PlatformUtils.isDesktop) return;
 
-//     final activeProxy = await ref.watch(activeProxyNotifierProvider.future);
+//     final activeProxy = await ref.watch(activeProxyProvider.future);
 //     final delay = activeProxy.urlTestDelay;
 //     final newConnectionStatus = delay > 0 && delay < 65000;
 //     ConnectionStatus connection;
 //     try {
-//       connection = await ref.watch(connectionNotifierProvider.future);
+//       connection = await ref.watch(connectionProvider.future);
 //     } catch (e) {
 //       loggy.warning("error getting connection status", e);
 //       connection = const ConnectionStatus.disconnected();
@@ -214,7 +214,7 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with TrayListener, AppLogg
 //         MenuItem(
 //           label: t.tray.dashboard,
 //           onClick: (_) async {
-//             await ref.read(windowNotifierProvider.notifier).open();
+//             await ref.read(windowProvider.notifier).open();
 //           },
 //         ),
 //         MenuItem.separator(),
@@ -229,7 +229,7 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with TrayListener, AppLogg
 //           checked: false,
 //           disabled: connection.isSwitching,
 //           onClick: (_) async {
-//            await ref.read(connectionNotifierProvider.notifier).toggleConnection();
+//            await ref.read(connectionProvider.notifier).toggleConnection();
 //          },
 //        ),
 //         MenuItem.separator(),
@@ -260,7 +260,7 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with TrayListener, AppLogg
 //         //         (e) => MenuItem(
 //         //           label: e.$1,
 //         //           onClick: (_) async {
-//         //             await ref.read(windowNotifierProvider.notifier).open();
+//         //             await ref.read(windowProvider.notifier).open();
 //         //             ref.read(routerProvider).go(e.$2);
 //         //           },
 //         //         ),
@@ -272,7 +272,7 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with TrayListener, AppLogg
 //         MenuItem(
 //           label: t.tray.quit,
 //           onClick: (_) async {
-//             return ref.read(windowNotifierProvider.notifier).quit();
+//             return ref.read(windowProvider.notifier).quit();
 //           },
 //         ),
 //       ],

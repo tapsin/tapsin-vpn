@@ -27,7 +27,7 @@ class SettingText extends ConsumerWidget {
       subtitle: Text(value.isEmpty ? t.common.empty : value),
       onTap: () async {
         final result = await ref
-            .read(dialogNotifierProvider.notifier)
+            .read(dialogProvider.notifier)
             .showSettingText(lable: title, value: value, defaultValue: defaultValue, validator: validator);
         if (result is String) setValue(result);
       },
