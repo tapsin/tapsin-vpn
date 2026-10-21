@@ -19,14 +19,13 @@ jobs:
         with:
           flutter-version: '3.47.x'
           channel: 'stable'
-          channel: 'stable'
           cache: true
 
       - name: Install dependencies
         run: flutter pub get
 
       - name: Generate code
-        run: dart run build_runner build --delete-conflicting-outputs
+        run: dart run slang && dart run build_runner build
 
       - name: Build Windows
         run: flutter build windows --release
@@ -34,13 +33,13 @@ jobs:
       - name: Package Windows
         run: |
           cd build/windows/x64/runner/Release
-          Compress-Archive -Path * -DestinationPath TAPSIN-VPN-Windows.zip
+          Compress-Archive -Path * -DestinationPath tapsin-vpn-windows.zip
 
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
         with:
           name: TAPSIN-VPN-Windows
-          path: build/windows/x64/runner/Release/TAPSIN-VPN-Windows.zip
+          path: build/windows/x64/runner/Release/tapsin-vpn-windows.zip
 
   build-linux:
     name: Build Linux (.AppImage)
@@ -61,14 +60,13 @@ jobs:
         with:
           flutter-version: '3.47.x'
           channel: 'stable'
-          channel: 'stable'
           cache: true
 
       - name: Install dependencies
         run: flutter pub get
 
       - name: Generate code
-        run: dart run build_runner build --delete-conflicting-outputs
+        run: dart run slang && dart run build_runner build
 
       - name: Build Linux
         run: flutter build linux --release
@@ -80,24 +78,31 @@ jobs:
 
       - name: Create AppImage
         run: |
-          mkdir -p AppDir/usr/bin AppDir/usr/lib AppDir/usr/share/applications AppDir/usr/share/icons
+          mkdir -p AppDir/usr/bin
           cp -r build/linux/x64/release/bundle/* AppDir/usr/bin/
-          cat > AppDir/tapsin-vpn.desktop << EOF
+          cat > AppDir/tapsin-vpn.desktop << 'EOF'
           [Desktop Entry]
-          Name=TAPSIN-VPN
-          Exec=tapsin_vpn
+          Name=Tapsin VPN
+          Exec=hiddify
           Icon=tapsin-vpn
           Type=Application
           Categories=Network;
           EOF
-          cp assets/images/logo.png AppDir/tapsin-vpn.png 2>/dev/null || true
-          ./appimagetool-x86_64.AppImage AppDir TAPSIN-VPN.AppImage
+          cp assets/images/source/ic_launcher_border.png AppDir/tapsin-vpn.png 2>/dev/null || true
+          cat > AppDir/AppRun << 'SCRIPT'
+          #!/bin/bash
+          HERE="$(dirname "$(readlink -f "${0}")")"
+          export LD_LIBRARY_PATH="${HERE}/usr/bin/lib:${LD_LIBRARY_PATH}"
+          exec "${HERE}/usr/bin/hiddify" "$@"
+          SCRIPT
+          chmod +x AppDir/AppRun
+          ARCH=x86_64 ./appimagetool-x86_64.AppImage AppDir tapsin-vpn.AppImage
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
         with:
           name: TAPSIN-VPN-Linux
-          path: TAPSIN-VPN.AppImage
+          path: tapsin-vpn.AppImage
 
   build-android:
     name: Build Android (.apk)
@@ -116,14 +121,13 @@ jobs:
         with:
           flutter-version: '3.47.x'
           channel: 'stable'
-          channel: 'stable'
           cache: true
 
       - name: Install dependencies
         run: flutter pub get
 
       - name: Generate code
-        run: dart run build_runner build --delete-conflicting-outputs
+        run: dart run slang && dart run build_runner build
 
       - name: Build APK
         run: flutter build apk --release --split-per-abi
@@ -151,17 +155,3 @@ jobs:
             TAPSIN-VPN-Linux/**
             TAPSIN-VPN-Android/**
           generate_release_notes: true
-          body: |
-            ## TAPSIN-VPN ${{ github.ref_name }}
-
-            ### Downloads
-            | Platform | File |
-            |----------|------|
-            | Windows | `TAPSIN-VPN-Windows.zip` |
-            | Linux | `TAPSIN-VPN.AppImage` |
-            | Android | `app-arm64-v8a-release.apk` (recommended) |
-
-            ### How to connect
-            1. Open the app → Add Profile
-            2. Enter your subscription token
-            3. Connect!
